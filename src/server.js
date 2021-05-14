@@ -3,6 +3,18 @@ import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 
+import mongoose from 'mongoose';
+import apiRouter from './router';
+
+// DB Setup
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/platform_db';
+
+mongoose.connect(mongoURI).then(() => {
+  console.log('connected to database:', mongoURI);
+}).catch((err) => {
+  console.log('error: could not connect to db:', err);
+});
+
 // initialize
 const app = express();
 
@@ -31,6 +43,8 @@ app.use(express.json()); // To parse the incoming requests with JSON payloads
 app.get('/', (req, res) => {
   res.send('hi');
 });
+
+app.use('/api', apiRouter);
 
 // START THE SERVER
 // =============================================================================
