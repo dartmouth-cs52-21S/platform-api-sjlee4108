@@ -8,6 +8,7 @@ export const createPost = async (postFields) => {
   post.coverUrl = postFields.coverUrl;
   post.tags = postFields.tags;
   post.content = postFields.content;
+  post.author = postFields.author;
 
   try {
     const savedpost = await post.save();
@@ -18,7 +19,7 @@ export const createPost = async (postFields) => {
 };
 export const getPosts = async () => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate('author');
     return posts;
   } catch (error) {
     throw new Error(`fetch posts error: ${error}`);
@@ -28,7 +29,7 @@ export const getPost = async (id) => {
   // await finding one post
   // return post
   try {
-    const post = await Post.findById(id);
+    const post = await Post.findById(id).populate('author');
     return post;
   } catch (error) {
     throw new Error(`fetch post error: ${error}`);
